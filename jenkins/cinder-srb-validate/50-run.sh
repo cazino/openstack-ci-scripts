@@ -32,11 +32,11 @@ function pre_test_hook() {
     echo "Running pre test hook"
 
     echo "Updating LVM configuration"
-    sed -i 's/# types = \[\ "fd",\ 16\ \]/types = [ "srb", 16 ]/' $MY_LVM_CONF
+    sudo sed -i 's/# types = \[\ "fd",\ 16\ \]/types = [ "srb", 16 ]/' $MY_LVM_CONF
 
     echo "Setting up devstack utility scripts"
-    cp jenkins/cinder-srb-validate/cinder_backends/srb /opt/stack/new/devstack/lib/cinder_backends/
-    cp jenkins/cinder-srb-validate/cinder_plugins/srb /opt/stack/new/devstack/lib/cinder_plugins/
+    sudo cp jenkins/cinder-srb-validate/cinder_backends/srb /opt/stack/new/devstack/lib/cinder_backends/
+    sudo cp jenkins/cinder-srb-validate/cinder_plugins/srb /opt/stack/new/devstack/lib/cinder_plugins/
 
     $eerror
     $xtrace
