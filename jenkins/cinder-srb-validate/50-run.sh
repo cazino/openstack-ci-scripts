@@ -57,8 +57,10 @@ export DEVSTACK_LOCAL_CONFIG=$(cat $DEVSTACK_LOCAL_CONFIG_FILE)
 
 rm $DEVSTACK_LOCAL_CONFIG_FILE
 
+set +e
 ./devstack-gate/devstack-vm-gate-wrap.sh
 RC=$?
+set -e
 
 cd $WORKSPACE
 mkdir jenkins-logs
