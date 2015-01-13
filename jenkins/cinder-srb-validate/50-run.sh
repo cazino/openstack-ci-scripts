@@ -38,6 +38,16 @@ function pre_test_hook() {
     sudo cp jenkins/cinder-srb-validate/cinder_backends/srb /opt/stack/new/devstack/lib/cinder_backends/
     sudo cp jenkins/cinder-srb-validate/cinder_plugins/srb /opt/stack/new/devstack/lib/cinder_plugins/
 
+    echo "Reinstalling Cinder if required"
+    if test -n "${JOB_CINDER_REPO:-}"; then
+            sudo rm -rf /opt/stack/new/cinder
+            sudo git clone ${JOB_CINDER_REPO} /opt/stack/new/cinder
+            pushd /opt/stack/new/cinder
+            sudo git checkout ${JOB_CINDER_BRANCH:-master}
+            sudo chown -R stack `pwd`
+            popd
+    fi
+
     $eerror
     $xtrace
 }
