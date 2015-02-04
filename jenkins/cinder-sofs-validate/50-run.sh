@@ -6,8 +6,15 @@ sudo gpasswd -a jenkins jenkins
 sudo useradd -m -U stack
 sudo gpasswd -a stack wheel
 
-export ZUUL_PROJECT=openstack-dev/sandbox
-export ZUUL_BRANCH=master
+export ZUUL_PROJECT=${GERRIT_PROJECT:-}
+export ZUUL_BRANCH=${GERRIT_BRANCH:-master}
+export ZUUL_REF=${GERRIT_REFSPEC:-}
+export ZUUL_PATCHET=${GERRIT_PATCHSET_NUMBER:-}
+export ZUUL_CHANGE=${GERRIT_CHANGE_NUMBER:-}
+
+if [ ! -z "${GERRIT_HOST:-}" ]; then
+    export ZUUL_URL=https://$GERRIT_HOST
+fi
 
 export PYTHONUNBUFFERED=true
 
