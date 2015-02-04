@@ -30,16 +30,6 @@ function pre_test_hook() {
     sudo cp jenkins/cinder-sofs-validate/cinder_backends/sofs /opt/stack/new/devstack/lib/cinder_backends/
     sudo cp jenkins/cinder-sofs-validate/extras.d/60-sofs.sh /opt/stack/new/devstack/extras.d/
 
-    echo "Reinstalling Cinder if required"
-    if test -n "${JOB_CINDER_REPO:-}"; then
-            sudo rm -rf /opt/stack/new/cinder
-            sudo git clone ${JOB_CINDER_REPO} /opt/stack/new/cinder
-            pushd /opt/stack/new/cinder
-            sudo git checkout ${JOB_CINDER_BRANCH:-master}
-            sudo chown -R stack `pwd`
-            popd
-    fi
-
     $eerror
     $xtrace
 }
@@ -65,6 +55,16 @@ fi
 if test -n "${JOB_CINDER_BRANCH:-}"; then
         cat >> $DEVSTACK_LOCAL_CONFIG_FILE << EOF
 CINDER_BRANCH=${JOB_CINDER_BRANCH}
+EOF
+fi
+
+# Reclone=yes doesn't play nicely with devstack-gate because it will override
+# the work done in devstack-gate/functions.sh::setup_project()
+# Set Reclone, iff this build is triggered manually and the canonical
+# repo/branch is overridden
+if test -n "${JOB_CINDER_REPO:-}" -o -n "${JOB_CINDER_BRANCH:-}"; then
+    cat >> $DEVSTACK_LOCAL_CONFIG_FILE << EOF
+RECLONE=yes
 EOF
 fi
 
