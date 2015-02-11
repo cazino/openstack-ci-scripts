@@ -326,4 +326,3 @@ build_ring
 show_ring_status
 install_sproxyd
 install_sfused
-install_dewpoint
